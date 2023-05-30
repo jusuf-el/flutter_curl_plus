@@ -1,0 +1,59 @@
+group 'com.ajinasokan.flutter_curl'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        maven {
+            url "${rootProject.buildDir}/flutter_curl/curlmaven"
+        }
+        google()
+        jcenter()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 16
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+def urlImplementation = { url, name ->
+    File file = new File("$buildDir/$name")
+    file.parentFile.mkdirs()
+    if (!file.exists()) {
+        copy {
+            from "$projectDir/maven"
+            into "$buildDir/curlmaven"
+        }
+        new URL(url).withInputStream { downloadStream ->
+            file.withOutputStream { fileOut ->
+                fileOut << downloadStream
+            }
+        }
+    }
+    'com.ajinasokan:flutter_curl:0.0.1'
+}
+
+dependencies {
+    implementation urlImplementation(
+        "https://github.com/ajinasokan/flutter_curl_binary/releases/download/0.3.0%2B3/Curl.aar", "curlmaven/com/ajinasokan/flutter_curl/0.0.1/flutter_curl-0.0.1.aar"
+    )
+}
