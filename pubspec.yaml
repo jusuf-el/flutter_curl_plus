@@ -1,7 +1,7 @@
-name: flutter_curl
+name: flutter_curl_plus
 description: Flutter plugin to use libcurl for HTTP calls
 version: 0.2.0
-homepage: https://github.com/ajinasokan/flutter_curl
+homepage: https://github.com/jusuf-el/flutter_curl_plus
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
